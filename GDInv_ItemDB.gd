@@ -41,7 +41,7 @@ func load_items_from_dir(path: String) -> void:
 		
 		# Until we have entries...
 		while (file_name != ""):
-			if (!dir.current_is_dir() && file_name.ends_with(".json")):
+			if (!dir.current_is_dir() && file_name.ends_with(".tres")):
 				print("    ", file_name);
 				load_item(path + file_name);
 			file_name = dir.get_next();
