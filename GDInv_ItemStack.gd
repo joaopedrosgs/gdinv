@@ -4,7 +4,7 @@ class_name GDInv_ItemStack
 
 # Fields.
 var stackSize: int = 0;
-var item: GDInv_ItemDefinition = null;
+var item: GDInv_ItemResource = null;
 var capabilities: Dictionary = {};
 
 # Constructor.

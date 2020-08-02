@@ -39,16 +39,16 @@ func clear() -> void:
 
 # Tries to add item by identifier. Returns true on success, otherwise false.
 func add_item_by_id(item_id: String, count: int = 1) -> bool:
-	var item_def: GDInv_ItemDefinition = GDInv_ItemDB.get_item_by_id(item_id);
+	var item_res: GDInv_ItemResource = GDInv_ItemDB.get_item_by_id(item_id);
 	
-	if (item_def == null):
+	if (item_res == null):
 		return false;
 
-	return add_item(item_def, count);
+	return add_item(item_res, count);
 
 # Tries to add item by item definition reference.
 # Returns true on success, otherwise false.
-func add_item(item_def: GDInv_ItemDefinition, count: int = 1) -> bool:
+func add_item(item_def: GDInv_ItemResource, count: int = 1) -> bool:
 	var new_stack = GDInv_ItemStack.new(item_def, count);
 	return add_stack(new_stack);
 
@@ -110,7 +110,7 @@ func add_stack(stack: GDInv_ItemStack) -> bool:
 # Tries to remove item by identifier.
 # Returns amount of removed items. If -1 then it means item_def is null!
 func remove_item_by_id(item_id: String, count: int = 1) -> int:
-	var item_def: GDInv_ItemDefinition = GDInv_ItemDB.get_item_by_id(item_id);
+	var item_def: GDInv_ItemResource = GDInv_ItemDB.get_item_by_id(item_id);
 	
 	if (item_def == null):
 		return -1;
@@ -119,7 +119,7 @@ func remove_item_by_id(item_id: String, count: int = 1) -> int:
 	
 # Tries to remove item by item definition reference.
 # Returns amount of removed items. If -1 then it means item_def is null!
-func remove_item(item_def: GDInv_ItemDefinition, count: int = 1) -> int:
+func remove_item(item_def: GDInv_ItemResource, count: int = 1) -> int:
 	var removedItems: int = 0;
 	
 	# Iterate trough inventory.
@@ -155,7 +155,7 @@ func remove_item(item_def: GDInv_ItemDefinition, count: int = 1) -> int:
 
 # Returns slot number with item that has specified identifier. Otherwise -1.
 func find_item_by_id(item_id: String, start: int = 0) -> int:
-	var item_def: GDInv_ItemDefinition = GDInv_ItemDB.get_item_by_id(item_id);
+	var item_def: GDInv_ItemResource = GDInv_ItemDB.get_item_by_id(item_id);
 	
 	if (item_def == null):
 		return -1;
@@ -163,7 +163,7 @@ func find_item_by_id(item_id: String, start: int = 0) -> int:
 	return find_item(item_def, start);
 
 # Returns slot number with item that has specified ItemDefinition instance. Otherwise -1.
-func find_item(item_def:GDInv_ItemDefinition, start: int = 0) -> int:
+func find_item(item_def:GDInv_ItemResource, start: int = 0) -> int:
 	var numStacks = STACKS.size();
 	
 	if (start >= numStacks):

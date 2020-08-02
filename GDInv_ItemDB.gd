@@ -2,7 +2,7 @@
 extends Node
 
 # Fields.
-const ItemDefinition = preload("GDInv_ItemDefinition.gd");
+
 const PluginSettings = preload("GDInv_Settings.gd");
 var REGISTRY: Dictionary = {};
 
@@ -31,6 +31,7 @@ func load_data() -> void:
 
 # Tries to load JSON files from specified directory.
 func load_items_from_dir(path: String) -> void:
+
 	var dir = Directory.new();
 	
 	# If directory exist.
@@ -48,51 +49,9 @@ func load_items_from_dir(path: String) -> void:
 		print("    End");
 	
 func load_item(url: String) -> void:
-	var file = File.new();
-	
-	if (!file.file_exists(url)):
-		print("      Failed to open file! Doesn't exist!");
-		return;
-	
-	if (file.open(url, File.READ)):
-		print("      Failed to open file!");
-		return;
+	var item = load(url) # Load resource file
+	REGISTRY[item.name] = item;
 
-	#print("test: ", file.get_as_text())
-
-	var json_result = JSON.parse(file.get_as_text());
-	file.close();
-
-	if (json_result.error != 0):
-		print("      Parse error (", json_result.error, ")");
-		return;
-
-	#print("      Data: ", json_result.result);
-	var item_data:Dictionary = json_result.result;
-	parse_item_data(item_data);
-	
-func parse_item_data(item_data: Dictionary) -> void:
-	var item_id: String = item_data.get("id");
-
-	if (item_id == null):
-		print("      Malformed json! Missing 'id' field!");
-		return;
-		
-	if (typeof(item_id) != TYPE_STRING):
-		print("      Malformed json! Field 'id' is not string!");
-		return;
-
-	var attributes = item_data.get("attributes", {});
-
-	if (typeof(attributes) != TYPE_DICTIONARY):
-		print("      Malformed json! Field 'attributes' is not map!");
-		return;
-
-	# Instantiate new item definition.
-	var new_item = ItemDefinition.new(item_id);
-	new_item.attributes = attributes;
-	new_item.maxStackSize = int(new_item.attributes.get("maxStackSize", 0));
-	REGISTRY[item_id] = new_item;
 	
 # Makes new stack instance and returns reference to it, otherwise returns null.
 func make_stack_by_id(item_id: String, count: int = 1) -> GDInv_ItemStack:
@@ -100,7 +59,7 @@ func make_stack_by_id(item_id: String, count: int = 1) -> GDInv_ItemStack:
 		return null;
 	
 	# Get item definition.
-	var item_def: GDInv_ItemDefinition = REGISTRY.get(item_id);
+	var item_def: GDInv_ItemResource = REGISTRY.get(item_id);
 	if (item_def == null):
 		return null;
 		
@@ -108,5 +67,5 @@ func make_stack_by_id(item_id: String, count: int = 1) -> GDInv_ItemStack:
 	return new_stack;
 
 # Getter by key for definition registry.
-func get_item_by_id(item_id: String) -> GDInv_ItemDefinition:
+func get_item_by_id(item_id: String) -> GDInv_ItemResource:
 	return REGISTRY.get(item_id);
